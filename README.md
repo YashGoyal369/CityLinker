@@ -1,119 +1,136 @@
-🚍 City‑Link – Real‑Time Bus Tracking & Booking Suite
+# 🚍 City-Link – Real-Time Bus Tracking & Booking Suite
 
-City‑Link is a full‑stack application that delivers live city‑bus tracking, ETA prediction, schedule management, ticketing and parcel bookings in one place.
-The driver shares location once; the backend keeps broadcasting updates via WebSockets while the frontend renders them on Google Maps in real time.
+**City-Link** is a scalable full-stack application that enables live city-bus tracking, ETA prediction, schedule management, ticket and parcel booking, all in one seamless experience.
 
-Scales in the wild: City‑Link already serves 1 000 + concurrent real‑time users without breaking a sweat!
+Built to serve 1000+ concurrent real-time users without breaking a sweat, City-Link uses WebSockets for lightning-fast updates and integrates Google Maps for intuitive visual feedback.
 
-✨ Features
-Live Tracking – see moving buses on an interactive map
+---
 
-Shortest‑Route & ETA – computes nearest bus to the user and predicts arrival time/delay
+## ✨ Features
 
-Dynamic Schedule – real‑time timetable that adapts to traffic conditions
+- **📍 Live Tracking** – Real-time moving buses on an interactive map.
+- **⏰ ETA Prediction** – Smart arrival time estimation based on traffic.
+- **🚌 Shortest Route Matching** – Finds nearest bus to the user.
+- **🚫 Dynamic Schedule** – Updates automatically with real-time delays.
+- **🚚 Parcel & Ticket Booking** – One-tap bookings from the app.
+- **🌐 WebSocket Streaming** – Low-latency location data with auto-reconnect.
+- **👷 Driver-Friendly** – Driver shares location once; system takes over.
+- **⚖️ Battle-Tested** – Serves 1K+ concurrent users reliably.
+- **🧰 Microservice Structure** – Clean split between backend and frontend.
 
-One‑Tap Ticket & Parcel Booking – reserve seats or send intra‑city parcels instantly
+---
 
-Socket‑Driven Updates – low‑latency location streaming with automatic reconnection
+## 📂 Folder Structure
 
-Driver‑Friendly – driver shares location once; system handles the rest
-
-Battle‑Tested Scale – proven to handle 1 k+ simultaneous users and dozens of buses
-
-Scalable Micro Split – separate backend (Node + Socket.io) and frontend (React + Vite)
-
-🗂️ Folder Structure
-
+```bash
 city-link/
-├── city-link-backend/
-│   ├── Main-Tracker/          # socket helpers & trackers
-│   ├── src/                   # Express controllers & services
+├── city-link-backend/        # Node.js + Socket.io backend
+│   ├── Main-Tracker/         # Socket helpers & trackers
+│   ├── src/                  # Express controllers/services
 │   ├── .env.sample.txt
-│   ├── package.json
-│   └── ...
-└── city-link-frontend/
+│   └── package.json
+└── city-link-frontend/       # React + Vite frontend
     ├── public/
-    ├── src/                   # React pages, components & hooks
+    ├── src/                  # Pages, components & hooks
     ├── index.html
     ├── vite.config.js
-    ├── package.json
-    └── ...
+    └── package.json
+```
 
+---
 
+## 📇 Tech Stack
 
+| Layer        | Technology                                      |
+|--------------|-------------------------------------------------|
+| Frontend     | React 18, Vite, Socket.io-client, Google Maps   |
+| Backend      | Node.js, Express, Socket.io, REST, JWT Auth     |
+| Realtime DB  | Redis / in-memory store                         |
+| Persistent DB| MongoDB / PostgreSQL (configurable)             |
+| Dev Tools    | ESLint, Prettier, Husky, dotenv                 |
 
-🏗️ Tech Stack
-Layer	Technology
-Frontend	React 18, Vite, Socket.io‑client, Google Maps JS API
-Backend	Node.js, Express, Socket.io, REST, JWT auth
-Realtime DB*	Redis / in‑memory store for transient coords
-Persistent DB	MongoDB / PostgreSQL (choose one)
-Dev Tools	ESLint, Prettier, Husky, dotenv
+---
 
-⚙️ Getting Started
-1. Clone & Install
+## ⚙️ Getting Started
 
-git clone https://github.com/<your‑org>/city-link.git
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/<your-org>/city-link.git
 cd city-link
 
-# Backend
+# Backend Setup
 cd city-link-backend
-cp .env.sample.txt .env            # fill in DB_URI, GOOGLE_API_KEY, JWT_SECRET, etc.
+cp .env.sample.txt .env   # Fill in DB_URI, GOOGLE_API_KEY, JWT_SECRET, etc.
 npm install
 npm run dev
 
-# In new terminal – Frontend
+# In a new terminal: Frontend Setup
 cd ../city-link-frontend
 npm install
-npm run dev                         # Vite defaults to http://localhost:5173
+npm run dev   # Defaults to http://localhost:5173
+```
 
+### 2. Expose Driver Socket (Optional)
 
+If drivers connect externally, expose the backend socket via [ngrok](https://ngrok.com/):
 
-
-2. Expose Driver Socket (optional)
-If buses connect from outside your network, forward the backend socket port (default 4000) using ngrok or a cloud load‑balancer:
-
+```bash
 ngrok http 4000
+```
 
+Update `CLIENT_SOCKET_URL` in `city-link-frontend/.env` with your ngrok URL.
 
-Update CLIENT_SOCKET_URL in city-link-frontend/.env with the HTTPS ngrok URL.
+### 3. Seed Demo Data (Optional)
 
-3. Seed Demo Data (optional)
-bash
-# inside backend
+```bash
+# Inside backend
 npm run seed
+```
 
+---
 
-🚦 Usage
-Driver app (or Postman) emits:
+## 🚦 Usage
 
+### 🚗 Driver Emission
+From a driver device or Postman:
+
+```json
 {
-  "busId": "BUS‑42",
-  "coords": { "lat": 28.6139, "lng": 77.2090 }
+  "busId": "BUS-42",
+  "coords": {
+    "lat": 28.6139,
+    "lng": 77.2090
+  }
 }
+```
 
+Backend emits `busLocation` to all clients. Frontend receives it and:
+- Animates marker on Google Maps
+- Updates ETA & UI widgets automatically
 
-Backend broadcasts busLocation event to all connected clients.
+---
 
-Frontend listens and moves the marker; ETA widget auto‑updates.
+## 📁 API Reference (Abridged)
 
+| Method | Endpoint                | Purpose                         |
+|--------|--------------------------|---------------------------------|
+| GET    | `/api/buses`            | List all active buses           |
+| GET    | `/api/buses/:id/eta`   | Get ETA to user location        |
+| POST   | `/api/bookings`        | Create a ticket/parcel booking  |
+| WS     | `busLocation (emit)`   | Push live GPS from driver       |
 
+---
 
-🔌 API Reference (abridged)
-Method	Endpoint	Purpose
-GET	/api/buses	list all active buses
-GET	/api/buses/:id/eta	ETA of given bus to user point
-POST	/api/bookings	create ticket/parcel booking
-WS	busLocation (emit)	push live GPS from driver
+## 🙏 Acknowledgements
 
+- Google Maps JavaScript SDK
+- Socket.io for real-time communication
+- Vite for fast frontend builds
 
-🙏 Acknowledgements
-Google Maps JavaScript SDK
+---
 
-Socket.io for realtime goodness
+Made with ❤️ by **Prateek Khandelwal** to make daily commutes smarter.
 
-Vite for lightning‑fast React builds
+> © Jan 2025 - Present. All rights reserved.
 
-Made with ❤️ by Prateek Khandelwal to make daily commutes smarter.
-
-Copyright (Jan 2025 - Present ) All rights are reserved.
