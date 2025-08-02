@@ -114,6 +114,6 @@ Socket.io for realtime goodness
 
 Vite for lightning‑fast React builds
 
-Made with ❤️ by Prateek Khandelwal to make daily commutes smarter.
+Made with ❤️ by Yash Goyal to make daily commutes smarter.
 
 Copyright (Jan 2025 - Present ) All rights are reserved.
