@@ -94,8 +94,7 @@ npm run seed
 
 ### 🚗 Driver Emission
 From a driver device or Postman:
-
-```json
+```
 {
   "busId": "BUS-42",
   "coords": {
@@ -103,20 +102,29 @@ From a driver device or Postman:
     "lng": 77.2090
   }
 }
+```
 
 
-Backend broadcasts busLocation event to all connected clients.
+### 2. “Backend broadcasts…” should be outside the code block
+Right now, because the JSON code block wasn’t closed, the following text appears as part of the code.  
+Move it outside and make it normal text.
 
-Frontend listens and moves the marker; ETA widget auto‑updates.
 
 
+### 3. API Reference table is not in Markdown table format
+Currently it’s just text, so it won’t render as a proper table.  
+Change to:
 
-🔌 API Reference (abridged)
-Method	Endpoint	Purpose
-GET	/api/buses	list all active buses
-GET	/api/buses/:id/eta	ETA of given bus to user point
-POST	/api/bookings	create ticket/parcel booking
-WS	busLocation (emit)	push live GPS from driver
+
+### 🔌 API Reference (abridged)
+
+| Method | Endpoint              | Purpose                          |
+|--------|----------------------|----------------------------------|
+| GET    | /api/buses            | List all active buses            |
+| GET    | /api/buses/:id/eta    | ETA of given bus to user point   |
+| POST   | /api/bookings         | Create ticket/parcel booking     |
+| WS     | busLocation (emit)    | Push live GPS from driver        |
+
 
 
 🙏 Acknowledgements
